@@ -1,1 +1,1 @@
-# Light Sensin
+# Light Sensing
