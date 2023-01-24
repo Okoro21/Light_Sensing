@@ -1,7 +1,7 @@
 import socket
 import time
 
-TCP_IP = "192.168.0.47"
+TCP_IP = "192.000.0.00"
 TCP_PORT = 65432
 
 BUFFER_SIZE = 1024
