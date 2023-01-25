@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <string.h>
+#include "SPIsensor.h"
 
 /* USER CODE END Includes */
 
@@ -47,11 +48,8 @@ ADC_HandleTypeDef hadc2;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-#define BUFSIZE 256
-uint16_t ADC_vals[BUFSIZE];
+SPI_sensor *my_struct;
 uint16_t rawADC;
-uint16_t count = 0;
-int ready_check = 0;
 
 /* USER CODE END PV */
 
@@ -77,9 +75,7 @@ static void MX_ADC2_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint16_t raw;
-	char msg[10];
-	char output[] = "Ready to send data\r\n";
+	SetMembers(my_struct);
 
   /* USER CODE END 1 */
 
@@ -105,8 +101,9 @@ int main(void)
   MX_USART3_UART_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start_IT(&hadc1);
+  my_struct -> ADC_ptr = &hadc1;
 
+  HAL_ADC_Start_IT(my_struct -> ADC_ptr);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,15 +114,12 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	if (ready_check == 1)
+	if (my_struct -> count < BUFSIZE)
 	{
-
-		//HAL_UART_Transmit(&huart3, (uint8_t *)output, sizeof(output), 500);
-		ready_check = 0;
-		count = 0;
-		HAL_ADC_Start_IT(&hadc1);
+		//Include process or flag to indicate that data is ready to be transferred to computer
+		SetMembers(my_struct);
+		HAL_ADC_Start_IT(my_struct -> ADC_ptr);
 	 }
-
 
   }
   /* USER CODE END 3 */
@@ -411,19 +405,15 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-	HAL_Delay(500);
-	if (count < (BUFSIZE - 1))
-	{
-		if (hadc == &hadc1)
+
+		if (hadc == my_struct -> ADC_ptr)
 		{
-			rawADC = HAL_ADC_GetValue(&hadc1);
-			ADC_vals[count] = rawADC;
-			count++;
+			rawADC = HAL_ADC_GetValue(my_struct -> ADC_ptr);
+			my_struct -> ADC_vals[my_struct -> count] = rawADC * V_CONVERSION;
+			my_struct -> count++;
 		}
-	}
-	else
-		ready_check = 1;
+
+		//Add an exception
 
 	HAL_ADC_Start_IT(&hadc1);
 }
