@@ -1,0 +1,14 @@
+../Core/Inc/SPIsensor.h:46:6:SetMembers	16	static
+../Core/Src/main.c:103:6:sensorHandle	16	static
+../Core/Src/main.c:114:6:TxDataHandle	16	static
+../Core/Src/main.c:135:5:main	72	static
+../Core/Src/main.c:219:6:SystemClock_Config	88	static
+../Core/Src/main.c:277:13:MX_ADC1_Init	24	static
+../Core/Src/main.c:329:13:MX_ETH_Init	8	static
+../Core/Src/main.c:378:13:MX_USART3_UART_Init	8	static
+../Core/Src/main.c:413:13:MX_USB_OTG_FS_PCD_Init	8	static
+../Core/Src/main.c:448:13:MX_GPIO_Init	56	static
+../Core/Src/main.c:505:6:StartDefaultTask	16	static
+../Core/Src/main.c:526:6:StartTask02	16	static
+../Core/Src/main.c:547:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:564:6:Error_Handler	4	static,ignoring_inline_asm
